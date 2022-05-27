@@ -2,7 +2,7 @@
 
 namespace Pirates;
 
-public readonly struct Ship : IComparable<Ship>
+public readonly struct Ship : IComparable<Ship>, IEquatable<Ship>, IComparable
 {
     public Ship(double azimuth, double distance, double speed, int id)
     {
@@ -34,12 +34,36 @@ public readonly struct Ship : IComparable<Ship>
     {
         return Id == 0
             ? "Молниеносный"
-            : $"Пират: \nId = {Id}\nАзимут = {Azimuth}\nСкорость = {Speed}миль/час\nРасстояние = {StartDistance}миль";
+            : $"Пират: \nId = {Id}\nАзимут = {Azimuth}" +
+              $"\nСкорость = {Speed}миль/час" +
+              $"\nРасстояние = {StartDistance}миль" +
+              $"\nВремя до захвата {TimeToTargetInHours} часов";
+    }
+
+    public int CompareTo(object? obj)
+    {
+        if (obj is not Ship s) throw new ArgumentException($"{obj} isn't {nameof(Ship)}");
+        return CompareTo(s);
     }
 
 
     public int CompareTo(Ship other)
     {
         return TimeToTargetInHours.CompareTo(other.TimeToTargetInHours);
+    }
+
+    public bool Equals(Ship other)
+    {
+        return Id == other.Id;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is Ship other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        return Id;
     }
 }

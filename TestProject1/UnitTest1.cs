@@ -5,6 +5,7 @@ using Pirates;
 
 namespace TestProject1;
 
+[TestFixture]
 public class Tests
 {
     [Test]
@@ -20,7 +21,7 @@ public class Tests
 
         var result = laser.GetResultInString();
 
-        result.Should().BeEquivalentTo("12.000\n2\n1");
+        result.Should().BeEquivalentTo("12.000\n2\n1\n");
     }
 
     [Test]
@@ -52,7 +53,7 @@ public class Tests
 
         var result = laser.GetResultInString();
 
-        result.Should().BeEquivalentTo("1.034\n2\n1");
+        result.Should().BeEquivalentTo("1.034\n2\n1\n");
     }
 
     [Test]
@@ -68,6 +69,6 @@ public class Tests
 
         var result = laser.GetResultInString();
 
-        result.Should().BeEquivalentTo("0.480\n1\n2");
+        result.Should().BeEquivalentTo("0.480\n1\n2\n");
     }
 }

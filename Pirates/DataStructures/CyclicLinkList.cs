@@ -2,7 +2,7 @@ using System.Collections;
 
 namespace Pirates.DataStructures;
 
-public class CyclicLinkList<T> : IEnumerable<T>
+public class CyclicLinkList<T> : IEnumerable<CyclicLinkList<T>>
 {
     public CyclicLinkList(IEnumerable<T> list)
     {
@@ -11,27 +11,49 @@ public class CyclicLinkList<T> : IEnumerable<T>
             Add(t);
         }
     }
-    
-    private CyclicLinkList(){}
+
+    private CyclicLinkList()
+    {
+    }
 
     public T? Value { get; set; }
     public CyclicLinkList<T>? Left { get; private set; }
     public CyclicLinkList<T>? Right { get; private set; }
 
-    public bool IsEmpty => Left is null || Right is null;
+    public bool IsEmpty => Left is null;
+
+    public bool IsSingleValue => this == Left;
 
     public void RemoveRight()
     {
         if (IsEmpty) throw new InvalidOperationException("List is Empty");
-        Right!.Right!.Left = this;
-        Right = Right.Right;
+        if (IsSingleValue)
+        {
+            Value = default;
+            Left = Right = null;
+        }
+        else
+        {
+            Right!.Right!.Left = this;
+            Right = Right.Right;
+        }
     }
+
     public void RemoveLeft()
     {
         if (IsEmpty) throw new InvalidOperationException("List is Empty");
-        Left!.Left!.Right = this;
-        Left = Left.Left;
+        if (IsSingleValue)
+        {
+            Value = default;
+            Left = Right = null;
+        }
+        else
+        {
+            Left!.Left!.Right = this;
+            Left = Left.Left;
+        }
     }
+
     public void Add(T val)
     {
         if (Left is null || Right is null)
@@ -53,18 +75,16 @@ public class CyclicLinkList<T> : IEnumerable<T>
         }
     }
 
-    public IEnumerator<T> GetEnumerator()
+    public IEnumerator<CyclicLinkList<T>> GetEnumerator()
     {
-        
-        if (Value is null)
+        if (IsEmpty)
             yield break;
-        
-        yield return Value;
+        yield return this;
 
         var cur = Right;
         while (!cur!.Equals(this))
         {
-            yield return cur.Value!;
+            yield return cur;
             cur = cur.Right;
         }
     }
