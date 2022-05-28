@@ -1,95 +1,97 @@
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using Pirates.DataStructures;
+using Pirates;
 
-namespace TestProject1;
-
-[TestFixture]
-public class CyclicLinkListTests
+namespace TestProject1
 {
-    private readonly int[] source = {1, 2, 3, 4, 5};
-    private CyclicLinkList<int> list;
 
-    [SetUp]
-    public void SetUp()
+    [TestFixture]
+    public class CyclicLinkListTests
     {
-        list = new CyclicLinkList<int>(source);
-    }
+        private readonly int[] source = {1, 2, 3, 4, 5};
+        private CyclicLinkList<int> list;
 
-    [Test]
-    public void List_should_init_correct()
-    {
-        list.Select(x => x.Value).Should().Contain(source);
-    }
+        [SetUp]
+        public void SetUp()
+        {
+            list = new CyclicLinkList<int>(source);
+        }
 
-    [Test]
-    public void List_should_save_ordering()
-    {
-        list.Select(x => x.Value).Should().ContainInOrder(source);
-    }
+        [Test]
+        public void List_should_init_correct()
+        {
+            list.Select(x => x.Value).Should().Contain(source);
+        }
 
-    [Test]
-    public void List_should_add_element()
-    {
-        list.Add(6);
+        [Test]
+        public void List_should_save_ordering()
+        {
+            list.Select(x => x.Value).Should().ContainInOrder(source);
+        }
 
-        list.Select(x => x.Value).Should().ContainInOrder(1, 2, 3, 4, 5, 6);
-    }
+        [Test]
+        public void List_should_add_element()
+        {
+            list.Add(6);
 
-    [Test]
-    public void List_should_remove_right()
-    {
-        list.RemoveRight();
+            list.Select(x => x.Value).Should().ContainInOrder(1, 2, 3, 4, 5, 6);
+        }
 
-        list.Select(x => x.Value).Should().ContainInOrder(1, 3, 4, 5);
-    }
+        [Test]
+        public void List_should_remove_right()
+        {
+            list.RemoveRight();
 
-    [Test]
-    public void List_should_remove_left()
-    {
-        list.RemoveLeft();
+            list.Select(x => x.Value).Should().ContainInOrder(1, 3, 4, 5);
+        }
 
-        list.Select(x => x.Value).Should().ContainInOrder(1, 2, 3, 4);
-    }
+        [Test]
+        public void List_should_remove_left()
+        {
+            list.RemoveLeft();
 
-    [Test]
-    public void List_should_removeRight_single_value()
-    {
-        var ls = new CyclicLinkList<int>(new[] {1});
+            list.Select(x => x.Value).Should().ContainInOrder(1, 2, 3, 4);
+        }
 
-        ls.RemoveRight();
+        [Test]
+        public void List_should_removeRight_single_value()
+        {
+            var ls = new CyclicLinkList<int>(new[] {1});
 
-        ls.Should().BeEmpty();
-    }
+            ls.RemoveRight();
 
-    [Test]
-    public void List_should_removeLeft_single_value()
-    {
-        var ls = new CyclicLinkList<int>(new[] {1});
+            ls.Should().BeEmpty();
+        }
 
-        ls.RemoveRight();
+        [Test]
+        public void List_should_removeLeft_single_value()
+        {
+            var ls = new CyclicLinkList<int>(new[] {1});
 
-        ls.Should().BeEmpty();
-    }
+            ls.RemoveRight();
 
-    [Test]
-    public void List_should_contain_link_on_self_when_after_removingRight()
-    {
-        var ls = new CyclicLinkList<int>(new[] {1, 2});
+            ls.Should().BeEmpty();
+        }
 
-        ls.RemoveRight();
+        [Test]
+        public void List_should_contain_link_on_self_when_after_removingRight()
+        {
+            var ls = new CyclicLinkList<int>(new[] {1, 2});
 
-        Assert.IsTrue(ls.Left == ls.Right && ls == ls.Left && ls.IsSingleValue);
-    }
+            ls.RemoveRight();
 
-    [Test]
-    public void List_should_contain_link_on_self_when_after_removingLeft()
-    {
-        var ls = new CyclicLinkList<int>(new[] {1, 2});
+            Assert.IsTrue(ls.Left == ls.Right && ls == ls.Left && ls.IsSingleValue);
+        }
 
-        ls.RemoveLeft();
+        [Test]
+        public void List_should_contain_link_on_self_when_after_removingLeft()
+        {
+            var ls = new CyclicLinkList<int>(new[] {1, 2});
 
-        Assert.IsTrue(ls.Left == ls.Right && ls == ls.Left && ls.IsSingleValue);
+            ls.RemoveLeft();
+
+            Assert.IsTrue(ls.Left == ls.Right && ls == ls.Left && ls.IsSingleValue);
+        }
     }
 }
