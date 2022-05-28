@@ -21,7 +21,7 @@ public class Tests
 
         var result = laser.GetResultInString();
 
-        result.Should().BeEquivalentTo("12.000\n2\n1\n");
+        result.Should().BeEquivalentTo("12.000\n1\n2\n");
     }
 
     [Test]
@@ -45,8 +45,8 @@ public class Tests
     {
         var pirates = new[]
         {
-            new Ship(15, 20, 20, 1),
-            new Ship(200, 0.5, 60, 2)
+            new Ship(15, 21, 20, 1),
+            new Ship(200, 1.5, 60, 2)
         };
 
         var laser = new LaserGun(0, 0.9, pirates.ToList());
@@ -61,8 +61,8 @@ public class Tests
     {
         var pirates = new[]
         {
-            new Ship(15, 20, 20, 1),
-            new Ship(200, 0.5, 60, 2)
+            new Ship(15, 21, 20, 1),
+            new Ship(200, 1.5, 60, 2)
         };
 
         var laser = new LaserGun(0, 1.1, pirates.ToList());

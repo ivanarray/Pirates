@@ -9,8 +9,8 @@ public readonly struct Ship : IComparable<Ship>, IEquatable<Ship>, IComparable
         Id = id;
         Speed = speed;
         Azimuth = azimuth;
-        StartDistance = distance;
-        TimeToTargetInHours = StartDistance / speed;
+        StartDistance = distance - 1;
+        TimeToTargetInHours = StartDistance / speed * 60;
     }
 
     public static Ship Parse(string s, int id)
