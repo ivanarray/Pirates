@@ -17,7 +17,7 @@ public class Tests
             new Ship(216, 22, 100, 2)
         };
 
-        var laser = new LaserGun(0, 0.05, pirates.ToList());
+        var laser = new LaserGun(0, new decimal(0.05), pirates.ToList());
 
         var result = laser.GetResultInString();
 
@@ -33,7 +33,7 @@ public class Tests
             new Ship(216, 20, 100, 2)
         };
 
-        var laser = new LaserGun(0, 0.05, pirates.ToList());
+        var laser = new LaserGun(0, new decimal(0.05), pirates.ToList());
 
         var result = laser.GetResultInString();
 
@@ -46,10 +46,10 @@ public class Tests
         var pirates = new[]
         {
             new Ship(15, 21, 20, 1),
-            new Ship(200, 1.5, 60, 2)
+            new Ship(200, new (1.5), 60, 2)
         };
 
-        var laser = new LaserGun(0, 0.9, pirates.ToList());
+        var laser = new LaserGun(0, new(0.9), pirates.ToList());
 
         var result = laser.GetResultInString();
 
@@ -62,10 +62,10 @@ public class Tests
         var pirates = new[]
         {
             new Ship(15, 21, 20, 1),
-            new Ship(200, 1.5, 60, 2)
+            new Ship(200, new(1.5), 60, 2)
         };
 
-        var laser = new LaserGun(0, 1.1, pirates.ToList());
+        var laser = new LaserGun(0, new(1.1), pirates.ToList());
 
         var result = laser.GetResultInString();
 

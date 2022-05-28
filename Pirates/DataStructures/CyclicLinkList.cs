@@ -93,4 +93,11 @@ public class CyclicLinkList<T> : IEnumerable<CyclicLinkList<T>>
     {
         return GetEnumerator();
     }
+
+    public override string ToString()
+    {
+        return $"Value: {Value}\n" +
+               $"Left: {Left.Value}\n" +
+               $"Right: {Right.Value}";
+    }
 }

@@ -6,14 +6,14 @@ namespace Pirates;
 
 public class LaserGun
 {
-    public double CurrentTimeInMinutes;
-    private readonly double maxSpeed;
+    public decimal CurrentTimeInMinutes;
+    private readonly decimal maxSpeed;
     private CyclicLinkList<Ship> ships;
 
-    public LaserGun(double azimuth, double maxSpeed, List<Ship> pirates)
+    public LaserGun(decimal azimuth, decimal maxSpeed, List<Ship> pirates)
     {
         this.maxSpeed = maxSpeed;
-        var startPosition = new Ship(azimuth, 0, 0, 0);
+        var startPosition = new Ship(azimuth, 0, 1, 0);
         pirates.Add(startPosition);
         pirates.Sort((x, y) => x.Azimuth.CompareTo(y.Azimuth));
         ships = new CyclicLinkList<Ship>(pirates);
@@ -30,31 +30,24 @@ public class LaserGun
                 .Where(x => x.Value.Id != ships.Value.Id)
                 .Min(x => x.Value);
 
-            var l = Math.Abs(ships.Left.Value.Azimuth - ships.Value.Azimuth);
-            l = l <= 180 ? l : 360 - l;
-            var r = Math.Abs(ships.Right.Value.Azimuth - ships.Value.Azimuth);
-            r = r <= 180 ? r : 360 - r;
+            var l = ships.Value.GetTimeToOther(ships.Left!.Value, maxSpeed);
+            var r = ships.Value.GetTimeToOther(ships.Right!.Value, maxSpeed);
+           
             var near = l < r ? ships.Left : ships.Right;
 
-            var distanceToNear = Math.Abs(ships.Value.Azimuth - near.Value.Azimuth);
-            distanceToNear = distanceToNear <= 180 ? distanceToNear : 360 - distanceToNear;
+            var timeToNear = ships.Value.GetTimeToOther(near.Value, maxSpeed);
 
-            var timeToNear = distanceToNear / (maxSpeed * 360);
-
-            var distanceFromNearToMin = Math.Abs(min.Azimuth - near.Value.Azimuth);
-            distanceFromNearToMin = distanceFromNearToMin <= 180 ? distanceFromNearToMin : 360 - distanceFromNearToMin;
-
-            var timeFromNearToMin = distanceFromNearToMin / (maxSpeed * 360);
+            var timeFromNearToMin = near.Value.GetTimeToOther(min, maxSpeed);
             var timeToNearAndMin = timeToNear + timeFromNearToMin;
-            var next = timeToNearAndMin < min.TimeToTargetInHours ? near.Value : min;
+            var next = timeToNearAndMin < min.TimeToTargetInMinutes ? near.Value : min;
 
-            var offsetAngle = Math.Abs(next.Azimuth - ships.Value.Azimuth);
+            var offsetAngle = Math.Abs((ships.Value.Azimuth - next.Azimuth) % 360);
 
             if (offsetAngle <= 180)
             {
                 res.Add(ships.Right!.Value);
                 CurrentTimeInMinutes += offsetAngle / (maxSpeed * 360);
-                if (CurrentTimeInMinutes > next.TimeToTargetInHours)
+                if (CurrentTimeInMinutes >= next.TimeToTargetInMinutes)
                 {
                     return null;
                 }
@@ -66,7 +59,7 @@ public class LaserGun
             {
                 res.Add(ships.Left!.Value);
                 CurrentTimeInMinutes += (360 - offsetAngle) / (maxSpeed * 360);
-                if (CurrentTimeInMinutes > next.TimeToTargetInHours)
+                if (CurrentTimeInMinutes >= next.TimeToTargetInMinutes)
                 {
                     return null;
                 }
@@ -78,7 +71,6 @@ public class LaserGun
 
         return res;
     }
-
 
     public string GetResultInString()
     {
